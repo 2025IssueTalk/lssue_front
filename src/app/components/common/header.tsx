@@ -31,6 +31,8 @@ const HeaderLayout = styled.div`
     align-items : center;
     flex-direction : row;
     padding : 0px 100px;
+    position : fixed;
+    background-color : white;
 
 `
 const Logo = styled.img`
