@@ -1,13 +1,15 @@
 'use client'
 import styled from "@emotion/styled"
-
+import { useRouter } from "next/navigation"
 const Header = () => {
+
+    const router = useRouter();
     return(
     <HeaderLayout>
         <Logo src="/svg/logo.svg"/>
 
         <Routers>
-            <RouterText>토론하기</RouterText>
+            <RouterText onClick={() => {router.push("/discussion")} }>토론하기</RouterText>
             <RouterText>오늘의 주제</RouterText>
         </Routers>
 
