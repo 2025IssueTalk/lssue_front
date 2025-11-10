@@ -1,23 +1,20 @@
 'use client'
 import styled from "@emotion/styled"
-import { useRouter , usePathname } from "next/navigation"
+import CreateForm from "@/app/components/Create/CreateForm";
 
-const Discussion = () => {
+const Create = () => {
 
-    const router = useRouter();
-    const path = usePathname();
     return(
-        <DiscussionLayout>
-
-
-        </DiscussionLayout>
+        <CreateLayout>
+          <CreateForm />
+        </CreateLayout>
     )
 
 }
 
-export default Discussion;
+export default Create;
 
-const DiscussionLayout = styled.div`
+const CreateLayout = styled.div`
   width : 100%;
   padding : 100px;
   height : 100vh;

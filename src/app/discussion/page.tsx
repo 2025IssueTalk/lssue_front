@@ -15,6 +15,9 @@ const Discussion = () => {
             </ButtonBox>
 
             <DiscussionBox />
+            <DiscussionBox />
+            <DiscussionBox />
+            <DiscussionBox />
 
         </DiscussionLayout>
     )
@@ -26,7 +29,7 @@ export default Discussion;
 const DiscussionLayout = styled.div`
   width : 100%;
   padding : 100px;
-  height : 100vh;
+  height : max;
   display : flex;
   flex-direction : column;
   align-items : center;
