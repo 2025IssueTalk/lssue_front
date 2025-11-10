@@ -1,5 +1,6 @@
 'use client'
 import styled from "@emotion/styled"
+import color from "./packages/design-system/src/color";
 
 export default function Home() {
   return (
@@ -18,7 +19,7 @@ export default function Home() {
 
 const HomeLayout = styled.div`
   width : 100%;
-  padding : 100px;
+  padding : 10px;
   height : 100vh;
   display : flex;
   flex-direction : row;
@@ -29,7 +30,7 @@ const HomeLayout = styled.div`
 
 const SubTitle = styled.p`
   font-family : G_middle;
-  color : #FF0055;
+  color : ${color.primary};
   font-size : 1vw;
 `
 
@@ -49,13 +50,13 @@ const Button = styled.button`
   height : 4vh;
   border-radius : 50px;
   border : none;
-  background-color : #FF0055;
+  background-color : ${color.primary};
   color : white;
   font-family : G_middle;
   font-size : 0.8vw;
   cursor : pointer;
   transition : all 0.3s ease;
   &:hover {
-    background-color : #ff6e9eff;
+    background-color : #516662ff;
   }
 `

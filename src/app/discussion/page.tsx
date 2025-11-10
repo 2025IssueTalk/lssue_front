@@ -1,6 +1,8 @@
 'use client'
 import styled from "@emotion/styled"
 import { useRouter , usePathname } from "next/navigation"
+import color from "../packages/design-system/src/color"
+import DiscussionBox from "../components/discussion/discussionBox"
 
 const Discussion = () => {
 
@@ -9,8 +11,10 @@ const Discussion = () => {
     return(
         <DiscussionLayout>
             <ButtonBox>
-            <RoomCreateButton onClick={() => {router.push(`${path}/create`)}}>방 생성하기</RoomCreateButton>
+            <RoomCreateButton onClick={() => {router.push(`${path}/create`)}}>방 생성</RoomCreateButton>
             </ButtonBox>
+
+            <DiscussionBox />
 
         </DiscussionLayout>
     )
@@ -24,22 +28,21 @@ const DiscussionLayout = styled.div`
   padding : 100px;
   height : 100vh;
   display : flex;
-  flex-direction : row;
+  flex-direction : column;
   align-items : center;
-  justify-content : center;
-  gap : 12vw;
+  justify-content : start;
+  gap : 20px;
 ` 
 
 const RoomCreateButton = styled.button`
   background-color : white;
-  color : #FF0055;
-  border : 1px solid #FF0055;
+  color : ${color.primary};
+  border : 1px solid ${color.primary};
   padding : 12px 36px;
-  border-radius : 25px; 
+  border-radius : 15px; 
+  font-family : G_middle;
 `
 
 const ButtonBox = styled.div`
   width : 100%;
-  height : 100%;
-
 `
