@@ -1,9 +1,21 @@
 'use client'
 import styled from "@emotion/styled"
 import color from "@/app/packages/design-system/src/color"
+import { useState } from "react"
 
 
 const CreateForm = () => {
+
+    const [chose,setchose] = useState(false);
+    const [yes,setyes] = useState(false);
+    const [no,setno] = useState(true);
+
+    function Change(){
+        setchose(!chose);
+        setyes(!yes);
+        setno(!no);
+    }
+
     return(
         <CreateLayout>
             <IconBox>
@@ -23,6 +35,18 @@ const CreateForm = () => {
             </TitleBox>
             <TitleBox>
                 <Title>공개 설정</Title>
+                <PublicButton onClick={() => {Change()}}>
+                    <ChoseTextLayout>
+                    <ChsoeTextBox>
+                    <ChoseText chose={yes}>예</ChoseText>
+                    </ChsoeTextBox>
+
+                    <ChsoeTextBox>
+                    <ChoseText chose={no}>아니오</ChoseText>
+                    </ChsoeTextBox>
+                    </ChoseTextLayout>
+                    <ChoseBox chose={chose} />
+                </PublicButton>
             </TitleBox>
             <div>
                 
@@ -109,5 +133,53 @@ const ChoseButtton = styled.button`
     }
 `
 
-const PublicOption = styled.div`
+const PublicButton = styled.div`
+
+    width : 14%;
+    height : 40px;
+    border :1.3px solid  ${color.primary};
+    border-radius : 15px;
+    overflow : hidden;
+    transition : all 0.3s ease;
+    position : relative;
+    display : flex;
+
+`
+
+const ChoseBox = styled.div<{ chose: boolean }>`
+    width : 50%;
+    height : 40px;
+    background-color : ${color.primary};
+    position : absolute;
+    transition : all 0.3s ease;
+    left: ${({ chose }) => (chose ? "50%" : "0%")};
+    z-index : 0;
+`
+
+const ChoseTextLayout = styled.div`
+    width : 100%;
+    display : flex;
+    justify-content : space-between;
+    z-index : 100;
+    align-items : center;
+    padding : 4px 0px;
+    display : flex;
+    flex-direction : row;
+`
+
+const ChsoeTextBox = styled.div`
+    width : 50%;
+    height : 100%;
+    display : flex;
+    align-items : center;
+    justify-content : center;
+`
+
+const ChoseText = styled.p<{ chose: boolean }>`
+
+    font-family : G_middle;
+    font-size : 0.9vw;
+    color : ${({ chose }) => (chose ? `${color.primary}` : "white")};
+    cursor : pointer;
+
 `
