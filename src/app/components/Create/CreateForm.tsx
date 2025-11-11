@@ -10,10 +10,16 @@ const CreateForm = () => {
     const [yes,setyes] = useState(false);
     const [no,setno] = useState(true);
 
-    function Change(){
-        setchose(!chose);
-        setyes(!yes);
-        setno(!no);
+    function ChangeYes(){
+        setchose(false);
+        setyes(false);
+        setno(true);
+    }
+
+    function ChangeNo(){
+        setchose(true);
+        setyes(true);
+        setno(false);
     }
 
     return(
@@ -35,25 +41,31 @@ const CreateForm = () => {
             </TitleBox>
             <TitleBox>
                 <Title>공개 설정</Title>
-                <PublicButton onClick={() => {Change()}}>
+                <PublicButton>
                     <ChoseTextLayout>
-                    <ChsoeTextBox>
+                    <ChsoeTextBox onClick={() => {ChangeYes()}}>
                     <ChoseText chose={yes}>예</ChoseText>
                     </ChsoeTextBox>
 
-                    <ChsoeTextBox>
+                    <ChsoeTextBox onClick={() => {ChangeNo()}}>
                     <ChoseText chose={no}>아니오</ChoseText>
                     </ChsoeTextBox>
                     </ChoseTextLayout>
                     <ChoseBox chose={chose} />
                 </PublicButton>
             </TitleBox>
-            <div>
-                
-            </div>
-            <div>
-                
-            </div>
+            <PasswordBox visible={no}>
+                <Title>비밀번호</Title>
+                <InputFild type="number" placeholder="비밀번호를 입력해주세요"/>
+            </PasswordBox>
+            <TitleBox>
+                <Title>토론주제</Title>
+                <InputFild type="text" placeholder="토론주제를 입력해주세요"/>
+            </TitleBox>
+
+            <SubmitButton>
+                <SubmitButtonText>방생성</SubmitButtonText>
+            </SubmitButton>
         </CreateLayout>
     )
 
@@ -63,14 +75,16 @@ export default CreateForm;
 
 const CreateLayout = styled.div`
     width :64%;
-    height : 80%;
+    
     border : 1px solid ${color.secondery};
     border-radius : 12px;
     padding : 24px 24px;
     display : flex;
     flex-direction : column;
     align-items : center;
-    gap : 24px;
+    gap : 36px;
+
+    transition : all 0.3s ease-in-out;
 `
 
 const IconBox = styled.div`
@@ -84,6 +98,13 @@ const TitleBox = styled.div`
     display : flex;
     flex-direction : column;
     gap : 10px;
+`
+
+const PasswordBox = styled(TitleBox)<{ visible: boolean }>`
+    opacity: ${({ visible }) => (visible ? 1 : 0)};
+    max-height: ${({ visible }) => (visible ? "100px" : "0")};
+    overflow: hidden;
+    transition: all 0.4s ease-in-out;
 `
 const Title = styled.p`
     color : ${color.primary};
@@ -126,7 +147,7 @@ const ChoseButtton = styled.button`
     font-family : G_middle;
     font-size : 1vw;
     color : black;
-    transition : all 0.3s ease;
+    transition : all 0.3s ease-in-out;
     &:hover  {
         background-color :${color.secondery};
         color : white;
@@ -140,7 +161,7 @@ const PublicButton = styled.div`
     border :1.3px solid  ${color.primary};
     border-radius : 15px;
     overflow : hidden;
-    transition : all 0.3s ease;
+    transition : all 0.3s ease-in-out;
     position : relative;
     display : flex;
 
@@ -151,7 +172,7 @@ const ChoseBox = styled.div<{ chose: boolean }>`
     height : 40px;
     background-color : ${color.primary};
     position : absolute;
-    transition : all 0.3s ease;
+    transition : all 0.3s ease-in-out;
     left: ${({ chose }) => (chose ? "50%" : "0%")};
     z-index : 0;
 `
@@ -182,4 +203,25 @@ const ChoseText = styled.p<{ chose: boolean }>`
     color : ${({ chose }) => (chose ? `${color.primary}` : "white")};
     cursor : pointer;
 
+`
+const SubmitButton = styled.button`
+    width : 12%;
+    height : 30px;
+    border : none;
+    background-color : ${color.primary};
+    border-radius : 30px;
+
+    transition : all 0.3s ease-in-out;
+
+    &:hover {
+        background-color : ${color.secondery};
+    }
+
+`
+
+const SubmitButtonText = styled.p`
+    color : white;
+    font-family : G_middle; 
+    font-size : 1vw;
+    padding : 4px;
 `
