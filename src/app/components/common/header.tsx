@@ -14,7 +14,7 @@ const Header = () => {
         </Routers>
 
         <LoginForm>
-            <RouterText>로그인</RouterText>
+            <RouterText onClick={() => {router.push("/login")}}>로그인</RouterText>
             <RouterText>회원가입</RouterText>
         </LoginForm>
     </HeaderLayout>
