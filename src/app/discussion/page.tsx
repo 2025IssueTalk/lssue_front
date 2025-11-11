@@ -8,6 +8,7 @@ const Discussion = () => {
 
     const router = useRouter();
     const path = usePathname();
+
     return(
         <DiscussionLayout>
             <ButtonBox>

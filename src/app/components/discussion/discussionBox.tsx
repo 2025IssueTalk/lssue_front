@@ -1,8 +1,13 @@
 'use client'
 import styled from "@emotion/styled"
 import color from "@/app/packages/design-system/src/color";
+import PasswordInputModal from "./PasswordInputModal";
+import { useState } from "react"
 
 const DiscussionBox = () => {
+
+    const [isopen,setisopen] = useState(false);
+
     return(
         <DiscussionBoxLayout>
             <DiscussionInfomationBox>
@@ -18,12 +23,16 @@ const DiscussionBox = () => {
 
             </DiscussionInfomationBox>
 
-            <EnterButton>
+            <EnterButton onClick={() => {setisopen(true)}}>
                 <EnterText>입장</EnterText>
                 <PeopleCount>(2/4)</PeopleCount>
 
             </EnterButton>
             
+
+
+
+             <PasswordInputModal isopen={isopen} setisopen={setisopen} />
 
         </DiscussionBoxLayout>
     )
@@ -39,6 +48,7 @@ const DiscussionBoxLayout = styled.div`
     display : flex;
     flex-direction : row;
     justify-content : space-between;
+    transition : all 0.3s ease-in-out;
 `
 
 const DiscussionInfomationBox = styled.div`
