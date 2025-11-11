@@ -6,7 +6,7 @@ const Header = () => {
     const router = useRouter();
     return(
     <HeaderLayout>
-        <Logo src="/svg/logo.svg"/>
+        <Logo src="/svg/logo.svg" onClick={() => {router.push("/")}}/>
 
         <Routers>
             <RouterText onClick={() => {router.push("/discussion")} }>토론하기</RouterText>

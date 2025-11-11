@@ -2,10 +2,11 @@
 import styled from "@emotion/styled"
 import color from "@/app/packages/design-system/src/color"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 
 const CreateForm = () => {
-
+    const router = useRouter();
     const [chose,setchose] = useState(false);
     const [yes,setyes] = useState(false);
     const [no,setno] = useState(true);
@@ -25,7 +26,7 @@ const CreateForm = () => {
     return(
         <CreateLayout>
             <IconBox>
-                <img src="/svg/close.svg" />
+                <img src="/svg/close.svg" onClick={() => {router.back()}} />
             </IconBox>
             <TitleBox>
                 <Title>방제목</Title>
@@ -91,6 +92,7 @@ const IconBox = styled.div`
     width : 100%;
     display : flex;
     justify-content : end;
+    cursor : pointer;
 `
 
 const TitleBox = styled.div`

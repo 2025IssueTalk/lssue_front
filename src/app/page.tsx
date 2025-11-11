@@ -1,14 +1,17 @@
 'use client'
 import styled from "@emotion/styled"
 import color from "./packages/design-system/src/color";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+
+  const router = useRouter();
   return (
     <HomeLayout>
       <div>
         <SubTitle>여러 주제로 같이 이야기 나누는</SubTitle>
         <Title>AI와 함께하는 건전한 토론</Title>
-        <Button>토론하기</Button>
+        <Button onClick={() => {router.push("/discussion")}}>토론하기</Button>
       </div>
       <div>
          <Logo src="/svg/logo.svg"/>
