@@ -10,7 +10,7 @@ const Header = () => {
 
         <Routers>
             <RouterText onClick={() => {router.push("/discussion")} }>토론하기</RouterText>
-            <RouterText>오늘의 주제</RouterText>
+            <RouterText onClick={() => {router.push("/topic")} }>오늘의 주제</RouterText>
         </Routers>
 
         <LoginForm>

@@ -45,6 +45,11 @@ const RoomCreateButton = styled.button`
   padding : 12px 36px;
   border-radius : 15px; 
   font-family : G_middle;
+  transition : all 0.3s ease-in-out;
+  &:hover{
+    background-color : ${color.primary};
+    color : white;
+  }
 `
 
 const ButtonBox = styled.div`
