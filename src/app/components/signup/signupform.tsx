@@ -1,8 +1,23 @@
 'use client'
 import styled from "@emotion/styled"
 import color from "@/app/packages/design-system/src/color";
+import { useState } from "react";
 
 const SignupForm = () => {
+
+    const [turn,isturn] = useState(false);
+    const [isopen ,setisopen] = useState(false);
+
+    const [emailDomain, setEmailDomain] = useState("직접입력");
+    const [isDirectInput, setIsDirectInput] = useState(true);
+    
+    function MailOpen(){
+        isturn(!turn);
+        setisopen(!isopen);
+    }
+
+
+
     return(
     <SignupFormLayout>
         <TextArea>
@@ -40,7 +55,47 @@ const SignupForm = () => {
             </EmialBox>
             @
             <EmialBoxs>
-            <MailChoseButton>직접입력</MailChoseButton> 
+            {isDirectInput ? (
+                <MailChoseInput type="text" placeholder="직접입력" />
+            ) :(
+                <MailChoseButton>{emailDomain}</MailChoseButton> 
+            )}
+            <DropArrow turn={turn} onClick={() => {MailOpen()}}>
+                <img src="/svg/droparrow.svg" />
+            </DropArrow>
+            <MailBar isoepn={isopen}>
+                <MailChose onClick={() => {
+                    setEmailDomain("")
+                    setIsDirectInput(true)
+                }}>
+                <EmailText>직접입력</EmailText>
+                </MailChose>
+                <MailChose onClick={() => {
+                    setEmailDomain("gmail.com")
+                    setIsDirectInput(false)
+                }}>
+                <EmailText>gmail.com</EmailText>
+                </MailChose>
+                <MailChose onClick={() => {
+                    setEmailDomain("naver.com")
+                    setIsDirectInput(false)
+                }}>
+                <EmailText>naver.com</EmailText>
+                </MailChose>
+                <MailChose onClick={() => {
+                    setEmailDomain("hanmail.net")
+                    setIsDirectInput(false)
+                }}>
+                <EmailText>hanmail.net</EmailText>
+                </MailChose>
+                <NoUnderBarMailChose onClick={() => {
+                    setEmailDomain("nate.com")
+                    setIsDirectInput(false)
+                }}>
+                <EmailText>nate.com</EmailText>
+                </NoUnderBarMailChose>
+       
+            </MailBar>
             </EmialBoxs>
 
             <EmailButton>
@@ -49,10 +104,14 @@ const SignupForm = () => {
 
             </EmailArea>
         </TitleBox>
-
+        <ButtonArea>
         <SubmitButton>
-                <SubmitButtonText>로그인</SubmitButtonText>
+                <SubmitButtonText>회원가입</SubmitButtonText>
         </SubmitButton>
+        <SubmitButtons>
+                <SubmitButtonTexts>가입취소</SubmitButtonTexts>
+        </SubmitButtons>
+        </ButtonArea>
     </SignupFormLayout>
     )
 
@@ -171,6 +230,38 @@ const SubmitButtonText = styled.p`
     padding : 4px;
 `
 
+const SubmitButtons = styled.button`
+    width : 18%;
+    height : 36px;
+    border : none;
+    background-color : white;
+    border-radius : 30px;
+    border : 1px solid ${color.primary};
+
+    transition : all 0.3s ease-in-out;
+
+    &:hover {
+        background-color : #e4e4e4ff;
+    }
+
+    outline : none;
+
+`
+
+const SubmitButtonTexts = styled.p`
+    color : ${color.primary};
+    font-family : G_middle; 
+    font-size : 1vw;
+    padding : 4px;
+`
+const EmailText = styled.p`
+    color : black;
+    font-family : G_middle; 
+    font-size : 1vw;
+    cursor : pointer;
+`
+
+
 const EmialBox = styled.div`
     width : 40%;
     background-color : white;
@@ -193,8 +284,9 @@ const EmialBoxs = styled.div`
     font-size : 1vw;
     border-radius : 30px;
     display : flex;
-    justify-content : space-between;
+    justify-content : center;
     align-items : center;
+    position : relative;
     `
 
 const EmailInputs = styled.input`
@@ -231,6 +323,26 @@ const MailChoseButton = styled.button`
     outline : none;
 `
 
+const MailChoseInput = styled.input`
+    width : 100%;
+    background-color : #ffffffff;
+    border : none; 
+    font-family : G_middle;
+    font-size : 1vw;
+    color : #8A8A8A;
+    ::placeholder{
+        font-family : G_middle;
+        font-size : 1vw;
+        color : #8A8A8A;
+    }
+    outline : none;
+    display : flex;
+    justify-content : center;
+    align-items : center;
+    text-align : center;
+`
+
+
 
 
 const EmailArea = styled.div`
@@ -255,3 +367,69 @@ const EmailButton = styled.button`
 
     outline : none;
     `
+
+const MailBar = styled.div<{isoepn : boolean}>`
+    position : absolute;
+    width : 100%;
+    padding : 0px 16px;
+    background-color : #ffffffff;
+    top:100%;
+    border : 1px solid  ${color.primary};
+    margin-top : 4px;
+    border-radius : 12px;
+    display : flex;
+    flex-direction : column;
+    justify-content : start;
+    align-items : center;
+    overflow : hidden;
+    visibility : ${({ isoepn }) => (isoepn ? "visible" : "hidden")};
+    height : max;
+    max-height : ${({ isoepn }) => (isoepn ? "200px" : "0px")};
+    transition : all 0.3s ease-in-out;
+    
+`
+
+const MailChose = styled.div`
+    width : 200%;
+    border-bottom : 1px solid ${color.secondery};
+    border-none;
+    height : auto;
+    padding : 4px;
+    display : flex;
+    justify-content : center;
+    align-items : center;
+`
+
+const NoUnderBarMailChose = styled.div`
+    width : 200%;
+    border-none;
+    height : auto;
+    padding : 4px;
+    display : flex;
+    justify-content : center;
+    align-items : center;
+`
+
+const DropArrow = styled.div<{ turn: boolean }>`
+    width : 20%;
+    height : 100%;
+    padding : 8px;
+    object-fit: contain;
+    transform : ${({ turn }) => (turn ? "rotate(180deg)" : "rotate(0deg)")};
+    transition : all 0.3s ease-in-out;
+    display : flex;
+    justify-content : center;
+    align-items : center;
+    
+`
+
+        
+const ButtonArea = styled.div`
+    width : 100%;
+    display : flex;
+    flex-direction : 36px;
+    align-items : center;
+    justify-content : center;
+    gap : 10%;
+    
+`
