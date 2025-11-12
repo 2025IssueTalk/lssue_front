@@ -69,7 +69,7 @@ const Main = styled.main`
   grid-template-columns: 1fr 2fr 1fr;
   gap: 24px;
   padding: 24px;
-  background-color: #f8fafc;
+  background-color: #ffffff;
   min-height: 100vh;
   margin-top: 8vh;
 
