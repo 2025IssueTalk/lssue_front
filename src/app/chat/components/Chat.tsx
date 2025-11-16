@@ -3,80 +3,128 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 
 type Msg = { id: string; role: 'user' | 'system' | 'pro' | 'con'; text: string };
-type Incoming = { type: 'chat' | 'summary'; role?: 'pro' | 'con' | 'user' | 'system'; text: string };
+type Incoming = {
+  type: 'chat' | 'summary' | 'participants' | 'joinedDebate';
+  role?: 'pro' | 'con' | 'user' | 'system';
+  text?: string;
+  participants?: string[];
+  roomId?: string;
+};
 
 const WS_URL = 'ws://localhost:8080';
+const API_URL = 'http://localhost:8080';
 
 export default function Chat({
-  onProSummary,
-  onConSummary,
+  onProSummary, //찬성 메시지
+  onConSummary, //반대 메세지
+  roomId,   // 방 ID를 전달받도록 추가
 }: {
   onProSummary: (t: string) => void;
   onConSummary: (t: string) => void;
+  roomId: string;
 }) {
   const [messages, setMessages] = useState<Msg[]>([]);
+  const [participants, setParticipants] = useState<string[]>([]);
   const [input, setInput] = useState('');
   const listRef = useRef<HTMLDivElement>(null);
 
   const ws = useMemo(() => {
     if (typeof window === 'undefined') return null as any;
     const s = new WebSocket(WS_URL);
-    s.addEventListener('open', () => console.log('[WS] connected'));
-    s.addEventListener('close', () => console.log('[WS] closed'));
-    return s;
-  }, []);
+    s.addEventListener('open', () => {
+      console.log('[WS] connected');
 
+      // 방 입장 요청
+      s.send(JSON.stringify({ event: 'joinDebate', roomId }));
+    });
+
+    s.addEventListener('close', () => {
+      console.log('[WS] closed');
+
+      // 방 퇴장 요청
+      s.send(JSON.stringify({ event: 'leaveDebate', roomId }));
+    });
+    return s;
+  }, [roomId]);
+
+  // WebSocket 메시지 처리
   useEffect(() => {
     if (!ws) return;
+
     const onMessage = (ev: MessageEvent) => {
       const data: Incoming = JSON.parse(ev.data);
-      if (data.type === 'summary') {
-        if (data.role === 'pro') onProSummary(data.text);
-        if (data.role === 'con') onConSummary(data.text);
+
+      // 참여자 목록 업데이트
+      if (data.type === 'participants' && data.participants) {
+        setParticipants(data.participants);
         return;
       }
+
+      // 방 참여 성공 메시지
+      if (data.type === 'joinedDebate') {
+        console.log(`방 입장 완료: ${data.roomId}`);
+        setParticipants(data.participants ?? []);
+        return;
+      }
+
+      // summary 반응 처리
+      if (data.type === 'summary') {
+        if (data.role === 'pro') onProSummary(data.text!);
+        if (data.role === 'con') onConSummary(data.text!);
+        return;
+      }
+
+      // 수신 채팅 메시지
       if (data.type === 'chat') {
         setMessages((prev) => [
           ...prev,
-          { id: crypto.randomUUID(), role: data.role as Msg['role'], text: data.text },
+          { id: crypto.randomUUID(), role: data.role as Msg['role'], text: data.text! },
         ]);
       }
     };
+
     ws.addEventListener('message', onMessage);
     return () => ws.removeEventListener('message', onMessage);
   }, [ws, onProSummary, onConSummary]);
 
+  // 채팅 보내기
   const send = () => {
-  if (!input.trim() || !ws || ws.readyState !== WebSocket.OPEN) return;
-  const text = input.trim();
-  const message = { type: 'chat', role: 'user', text };
-  ws.send(JSON.stringify(message));
+    if (!input.trim() || !ws || ws.readyState !== WebSocket.OPEN) return;
 
-  // 내가 보낼 때마다 요약 즉시 갱신 신호
-  if (text.includes('찬성')) {
-    onProSummary(text);
-  } else if (text.includes('반대')) {
-    onConSummary(text);
-  }
+    const text = input.trim();
 
-  setMessages((prev) => [...prev, { id: crypto.randomUUID(), role: 'user', text }]);
-  setInput('');
-};
+    ws.send(
+      JSON.stringify({ type: 'chat', role: 'user', text, roomId })
+    );
 
+    if (text.includes('찬성')) onProSummary(text);
+    if (text.includes('반대')) onConSummary(text);
+
+    setMessages((prev) => [...prev, { id: crypto.randomUUID(), role: 'user', text }]);
+    setInput('');
+  };
 
   return (
     <ChatWrapper>
       <Header>
-        <small>오늘의 주제</small>
+        <small>오늘의 주제</small>  {/* 주제 나중에 받는거 만들어야함 */}
         <h2>윤석열 탄핵</h2>
-        <p> 2 : 2 </p>
+        <p>참여자 {participants.length}명</p>
       </Header>
 
       <Messages ref={listRef}>
         {messages.length === 0 && <Empty>대화를 시작해 보세요…</Empty>}
         {messages.map((m) => (
           <Bubble key={m.id} role={m.role}>
-            <span>{m.role === 'user' ? '나' : m.role === 'pro' ? '찬성' : m.role === 'con' ? '반대' : 'AI'}</span>
+            <span>
+              {m.role === 'user'
+                ? '나'
+                : m.role === 'pro'
+                ? '찬성'
+                : m.role === 'con'
+                ? '반대'
+                : 'AI'}
+            </span>
             {m.text}
           </Bubble>
         ))}
@@ -96,6 +144,8 @@ export default function Chat({
     </ChatWrapper>
   );
 }
+
+
 
 const ChatWrapper = styled.div`
   display: flex;

@@ -17,7 +17,6 @@ export default function ChatPage() {
 
   return (
     <Main>
-      {/* 왼쪽 — 찬성측 */}
       <Sidebar side="pro">
         <SideTitle tone="pro">찬성 측</SideTitle>
         {hasProContent && (
@@ -31,8 +30,6 @@ export default function ChatPage() {
           </>
         )}
       </Sidebar>
-
-      {/* 중앙 — 채팅 */}
       <ChatContainer>
         <Chat
           onProSummary={(t) => {
@@ -45,8 +42,6 @@ export default function ChatPage() {
           }}
         />
       </ChatContainer>
-
-      {/* 오른쪽 — 반대측 */}
       <Sidebar side="con">
         <SideTitle tone="con">반대 측</SideTitle>
         {hasConContent && (
